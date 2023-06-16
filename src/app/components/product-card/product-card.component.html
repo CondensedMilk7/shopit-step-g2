@@ -21,9 +21,17 @@
       }}
     </p>
     <p>{{ product.price | currency : "EUR" }}</p>
-    <button class="btn btn-primary">Add To Cart</button>
+    <button
+      class="btn btn-primary"
+      *ngIf="!isCart"
+      (click)="addToCart.emit(product.id)"
+    >
+      Add To Cart
+    </button>
+    <button class="btn btn-success" *ngIf="isCart">Checkout</button>
     <button
       class="btn btn-danger ms-2"
+      *ngIf="isCart"
       (click)="deleteProduct.emit(product.id)"
     >
       Delete

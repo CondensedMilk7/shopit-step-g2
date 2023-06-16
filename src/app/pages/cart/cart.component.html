@@ -1,0 +1,11 @@
+<div class="container py-4">
+  <div class="m-auto row row-cols-auto g-3">
+    <app-product-card
+      class="col"
+      *ngFor="let product of products"
+      [product]="product"
+      [isCart]="true"
+      (deleteProduct)="onDelete($event)"
+    ></app-product-card>
+  </div>
+</div>
