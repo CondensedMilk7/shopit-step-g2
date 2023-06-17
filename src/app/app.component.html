@@ -8,6 +8,5 @@
     (search)="onSearchProduct($event)"
     (navigate)="onNavigate($event)"
   ></app-header>
-  <app-shop *ngIf="currentPage === 'shop'"></app-shop>
-  <app-cart *ngIf="currentPage === 'cart'"></app-cart>
+  <router-outlet></router-outlet>
 </div>

@@ -6,16 +6,32 @@
         <a
           class="nav-link"
           aria-current="page"
-          href="#"
-          (click)="navigate.emit('shop')"
+          routerLink="/shop"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
           >Shop</a
         >
         <a
           class="nav-link"
           aria-current="page"
-          href="#"
-          (click)="navigate.emit('cart')"
+          routerLink="/shop/recommended"
+          routerLinkActive="active"
+          >For You</a
+        >
+        <a
+          class="nav-link"
+          aria-current="page"
+          routerLink="/cart"
+          routerLinkActive="active"
           >Cart</a
+        >
+
+        <a
+          class="nav-link"
+          aria-current="page"
+          routerLink="/sign-in"
+          routerLinkActive="active"
+          >Sign In</a
         >
       </div>
     </div>

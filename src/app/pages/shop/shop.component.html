@@ -1,10 +1,3 @@
 <div class="container py-4">
-  <div class="m-auto row row-cols-auto g-3">
-    <app-product-card
-      class="col"
-      *ngFor="let product of products"
-      [product]="product"
-      (addToCart)="onAddToCart($event)"
-    ></app-product-card>
-  </div>
+  <router-outlet></router-outlet>
 </div>
