@@ -2,7 +2,7 @@
 <div class="m-auto row row-cols-auto g-3">
   <app-product-card
     class="col"
-    *ngFor="let product of products"
+    *ngFor="let product of products | productFilter : filterText"
     [product]="product"
     (addToCart)="onAddToCart($event)"
   ></app-product-card>

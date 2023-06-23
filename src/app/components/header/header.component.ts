@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { PageType } from 'src/app/types/page-type';
 
 @Component({
   selector: 'app-header',
@@ -7,9 +6,8 @@ import { PageType } from 'src/app/types/page-type';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent {
-  searchText = '';
+  @Input() searchText = '';
   @Input() isDark = false;
   @Output() toggleDark = new EventEmitter<boolean>();
   @Output() search = new EventEmitter<string>();
-  @Output() navigate = new EventEmitter<PageType>();
 }

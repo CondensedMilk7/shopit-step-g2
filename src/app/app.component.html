@@ -4,9 +4,9 @@
 >
   <app-header
     [isDark]="isDark"
+    [searchText]="searchText"
     (toggleDark)="onToggleDark($event)"
     (search)="onSearchProduct($event)"
-    (navigate)="onNavigate($event)"
   ></app-header>
   <router-outlet></router-outlet>
 </div>
