@@ -1,11 +1,14 @@
-<div class="container py-4">
-  <h1>My Cart</h1>
+<div *ngIf="cart$ | async as cart" class="container py-4">
+  <div class="cart-header">
+    <h1>My Cart</h1>
+    <h3>total: {{ cart.total | currency : "EUR" }}</h3>
+  </div>
+
   <div class="m-auto row row-cols-auto g-3">
     <app-product-card
       class="col"
-      *ngFor="let product of products"
-      [product]="product"
-      [isCart]="true"
+      *ngFor="let product of cart.products"
+      [cartProduct]="product"
       (deleteProduct)="onDelete($event)"
     ></app-product-card>
   </div>

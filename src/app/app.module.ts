@@ -17,6 +17,7 @@ import { AllComponent } from './pages/shop/all/all.component';
 import { SignInComponent } from './pages/sign-in/sign-in.component';
 import { ProductDetailsComponent } from './pages/shop/product-details/product-details.component';
 import { RegisterComponent } from './pages/register/register.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { RegisterComponent } from './pages/register/register.component';
     FormsModule,
     RouterModule.forRoot(APP_ROUTES),
     ReactiveFormsModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

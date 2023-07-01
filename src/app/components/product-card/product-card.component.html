@@ -1,42 +1,55 @@
-<div
-  class="card border-4"
-  [appCardHighlight]="
-    product.discountPercentage > 0 ? 'border-warning' : 'border-danger'
-  "
-  [ngClass]="{ 'border-info': product.discountPercentage > 0 }"
->
-  <img [src]="product.thumbnail" class="card-img-top" [alt]="product.title" />
-  <div class="card-body">
-    <h5 class="card-title">
-      <a routerLink="/shop/{{ product.id }}">{{ product.title | uppercase }}</a>
-    </h5>
-    <p class="card-text">
-      {{ product.description }}
-    </p>
-    <p
-      class="text-decoration-line-through"
-      *ngIf="product.discountPercentage > 0"
-    >
-      {{
-        (product.price * (100 + product.discountPercentage)) / 100
-          | currency : "EUR"
-      }}
-    </p>
-    <p>{{ product.price | currency : "EUR" }}</p>
-    <button
-      class="btn btn-primary"
-      *ngIf="!isCart"
-      (click)="addToCart.emit(product.id)"
-    >
-      Add To Cart
-    </button>
-    <button class="btn btn-success" *ngIf="isCart">Checkout</button>
-    <button
-      class="btn btn-danger ms-2"
-      *ngIf="isCart"
-      (click)="deleteProduct.emit(product.id)"
-    >
-      Delete
-    </button>
+<div class="card border-4">
+  <div *ngIf="product">
+    <img [src]="product.thumbnail" class="card-img-top" [alt]="product.title" />
+    <div class="card-body">
+      <h5 class="card-title">
+        <a routerLink="/shop/{{ product.id }}">{{
+          product.title | uppercase
+        }}</a>
+      </h5>
+      <p class="card-text">
+        {{ product.description }}
+      </p>
+      <p
+        class="text-decoration-line-through"
+        *ngIf="product.discountPercentage > 0"
+      >
+        {{
+          (product.price * (100 + product.discountPercentage)) / 100
+            | currency : "EUR"
+        }}
+      </p>
+      <p>{{ product.price | currency : "EUR" }}</p>
+      <button class="btn btn-primary" (click)="addToCart.emit(product.id)">
+        Add To Cart
+      </button>
+    </div>
+  </div>
+  <div *ngIf="cartProduct">
+    <div class="card-body">
+      <h5 class="card-title">
+        <a routerLink="/shop/{{ cartProduct.id }}">{{
+          cartProduct.title | uppercase
+        }}</a>
+      </h5>
+      <p
+        class="text-decoration-line-through"
+        *ngIf="cartProduct.discountPercentage > 0"
+      >
+        {{
+          (cartProduct.price * (100 + cartProduct.discountPercentage)) / 100
+            | currency : "EUR"
+        }}
+      </p>
+      <p>{{ cartProduct.price | currency : "EUR" }}</p>
+
+      <button class="btn btn-success">Checkout</button>
+      <button
+        class="btn btn-danger ms-2"
+        (click)="deleteProduct.emit(cartProduct.id)"
+      >
+        Delete
+      </button>
+    </div>
   </div>
 </div>

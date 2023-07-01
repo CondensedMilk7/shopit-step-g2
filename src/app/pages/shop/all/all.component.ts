@@ -10,8 +10,8 @@ import { Product } from 'src/app/types/product';
   styleUrls: ['./all.component.scss'],
 })
 export class AllComponent implements OnInit, OnDestroy {
-  products: Product[] = [];
-  filterText = '';
+  products$ = this.productsService.products$;
+  loading$ = this.productsService.loading$;
   destroyed$ = new Subject<void>();
 
   constructor(
@@ -20,13 +20,15 @@ export class AllComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.products = this.productsService.getProducts();
-
     this.route.queryParamMap
       .pipe(takeUntil(this.destroyed$))
       .subscribe((paramMap) => {
         const search = paramMap.get('search');
-        this.filterText = search || '';
+        if (search) {
+          this.productsService.searchProducts(search);
+        } else {
+          this.productsService.getProducts();
+        }
       });
   }
 
