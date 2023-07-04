@@ -20,8 +20,20 @@
         }}
       </p>
       <p>{{ product.price | currency : "EUR" }}</p>
-      <button class="btn btn-primary" (click)="addToCart.emit(product.id)">
-        Add To Cart
+      <button
+        class="btn btn-primary"
+        [disabled]="loading"
+        (click)="addToCart.emit(product.id)"
+      >
+        <ng-container *ngIf="!loading">Add To Cart</ng-container>
+        <ng-container *ngIf="loading">
+          <span
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+          Loading...
+        </ng-container>
       </button>
     </div>
   </div>
@@ -36,19 +48,35 @@
         class="text-decoration-line-through"
         *ngIf="cartProduct.discountPercentage > 0"
       >
-        {{
-          (cartProduct.price * (100 + cartProduct.discountPercentage)) / 100
-            | currency : "EUR"
-        }}
+        {{ cartProduct.price | currency : "EUR" }}
       </p>
-      <p>{{ cartProduct.price | currency : "EUR" }}</p>
+      <p>{{ cartProduct.discountedPrice | currency : "EUR" }}</p>
 
-      <button class="btn btn-success">Checkout</button>
+      <button class="btn btn-success" [disabled]="loading">
+        <ng-container *ngIf="!loading">Checkout</ng-container>
+        <ng-container *ngIf="loading">
+          <span
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+          Loading...
+        </ng-container>
+      </button>
       <button
         class="btn btn-danger ms-2"
+        [disabled]="loading"
         (click)="deleteProduct.emit(cartProduct.id)"
       >
-        Delete
+        <ng-container *ngIf="!loading">Delete</ng-container>
+        <ng-container *ngIf="loading">
+          <span
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+          Loading...
+        </ng-container>
       </button>
     </div>
   </div>

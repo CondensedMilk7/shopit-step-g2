@@ -18,6 +18,7 @@ import { SignInComponent } from './pages/sign-in/sign-in.component';
 import { ProductDetailsComponent } from './pages/shop/product-details/product-details.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { HttpClientModule } from '@angular/common/http';
+import { MessageModalComponent } from './components/message-modal/message-modal.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { HttpClientModule } from '@angular/common/http';
     SignInComponent,
     ProductDetailsComponent,
     RegisterComponent,
+    MessageModalComponent,
   ],
   imports: [
     BrowserModule,

@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { GetProductsResponse, Product } from '../types/product';
 import { BehaviorSubject } from 'rxjs';
 import { Cart, GetCartResponse } from '../types/cart';
+import { MessageService } from './message.service';
 
 @Injectable({ providedIn: 'root' })
 export class ProductsService {
@@ -20,11 +21,16 @@ export class ProductsService {
     userId: 0,
   });
   loading$ = new BehaviorSubject<boolean>(false);
+  productLoading$ = new BehaviorSubject<number | null>(null);
 
   private products = PRODUCTS;
   private cartProducts = PRODUCTS.splice(0, 2);
 
-  constructor(private router: Router, private http: HttpClient) {}
+  constructor(
+    private router: Router,
+    private http: HttpClient,
+    private messageService: MessageService
+  ) {}
 
   getProducts() {
     this.loading$.next(true);
@@ -58,19 +64,55 @@ export class ProductsService {
       });
   }
 
-  deleteFromCart(id: number) {
-    this.cartProducts = this.cartProducts.filter((p) => p.id !== id);
+  deleteFromCart(cartId: number, toDeleteId: number) {
+    const products = this.cart$.value.products;
+    const filteredProducts = products.filter((prod) => prod.id !== toDeleteId);
+    this.productLoading$.next(toDeleteId);
+
+    const payload = {
+      merge: false,
+      products: filteredProducts,
+    };
+
+    this.http
+      .put<Cart>(`${this.baseUrl}/carts/${cartId}`, payload)
+      .subscribe((updatedCart) => {
+        this.cart$.next(updatedCart);
+        this.productLoading$.next(null);
+      });
   }
 
-  addToCart(id: number) {
-    const productToAdd = this.products.find((p) => p.id === id);
+  addToCart(productId: number, quantity: number = 1) {
+    this.productLoading$.next(productId);
 
-    if (productToAdd) {
-      this.cartProducts.unshift(productToAdd);
-      this.router.navigate(['cart']);
-    } else {
-      throw new Error(`Could not add product to cart. ID: ${id}`);
-    }
+    const payload = {
+      merge: true,
+      products: [{ id: productId, quantity }],
+    };
+
+    this.http
+      .put<Cart>(`${this.baseUrl}/carts/${this.cart$.value.id}`, payload)
+      .subscribe((updatedCart) => {
+        this.cart$.next(updatedCart);
+        this.productLoading$.next(null);
+        this.messageService.message({
+          title: 'Product Added!',
+          description: 'Your product has been added to cart!',
+        });
+      });
+  }
+
+  addProduct(product: Partial<Product>) {
+    this.loading$.next(true);
+
+    this.http
+      .post<Product>(`${this.baseUrl}/products/add`, product)
+      .subscribe((newProduct) => {
+        const products = this.products$.value;
+        products.unshift(newProduct);
+        this.products$.next(products);
+        this.loading$.next(false);
+      });
   }
 
   getRecommendedProduct() {

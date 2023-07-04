@@ -10,6 +10,7 @@ import { Product } from 'src/app/types/product';
 export class ProductCardComponent {
   @Input() product!: Product;
   @Input() cartProduct!: CartProduct;
+  @Input() loading = false;
   @Output() deleteProduct = new EventEmitter<number>();
   @Output() addToCart = new EventEmitter<number>();
 }

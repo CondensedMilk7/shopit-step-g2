@@ -1,0 +1,13 @@
+<ng-container *ngIf="modalMessage">
+  <div class="message-modal">
+    <div class="card" style="width: 18rem">
+      <div class="card-body">
+        <h5 class="card-title">{{ modalMessage.title }}</h5>
+        <p class="card-text">
+          {{ modalMessage.description }}
+        </p>
+        <button class="btn btn-primary" (click)="close.emit()">OK</button>
+      </div>
+    </div>
+  </div>
+</ng-container>

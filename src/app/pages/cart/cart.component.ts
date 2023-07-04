@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { Product } from 'src/app/types/product';
+import { Component } from '@angular/core';
 import { ProductsService } from 'src/app/services/products.service';
 
 @Component({
@@ -7,16 +6,14 @@ import { ProductsService } from 'src/app/services/products.service';
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.scss'],
 })
-export class CartComponent implements OnInit {
+export class CartComponent {
   cart$ = this.productsService.cart$;
+  loading$ = this.productsService.loading$;
+  productLoading$ = this.productsService.productLoading$;
 
   constructor(private productsService: ProductsService) {}
 
-  ngOnInit(): void {
-    this.productsService.getCart();
-  }
-
-  onDelete(id: number) {
-    this.productsService.deleteFromCart(id);
+  onDelete(cartId: number, productId: number) {
+    this.productsService.deleteFromCart(cartId, productId);
   }
 }

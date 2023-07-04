@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
+import { ProductsService } from './services/products.service';
 
 @Component({
   selector: 'app-root',
@@ -12,13 +13,19 @@ export class AppComponent implements OnInit, OnDestroy {
   searchText = '';
   destroyed$ = new Subject<void>();
 
-  constructor(private router: Router, private route: ActivatedRoute) {}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private productsService: ProductsService
+  ) {}
 
   ngOnInit() {
     const wasDark = localStorage.getItem('is_dark');
     if (wasDark === 'true') {
       this.isDark = true;
     }
+
+    this.productsService.getCart();
 
     this.route.queryParamMap
       .pipe(takeUntil(this.destroyed$))
