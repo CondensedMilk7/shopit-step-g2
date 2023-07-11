@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { combineLatest, map } from 'rxjs';
 import { ProductsService } from 'src/app/services/products.service';
-import { Product } from 'src/app/types/product';
 
 @Component({
   selector: 'app-recommended',
@@ -8,12 +8,25 @@ import { Product } from 'src/app/types/product';
   styleUrls: ['./recommended.component.scss'],
 })
 export class RecommendedComponent implements OnInit {
-  products: Product[] = [];
+  private products$ = this.productsService.products;
+  private loading$ = this.productsService.loading;
+  private productLoading$ = this.productsService.productLoading;
+
+  vm$ = combineLatest([
+    this.products$,
+    this.loading$,
+    this.productLoading$,
+  ]).pipe(
+    map(([products, loading, productLoading]) => ({
+      products,
+      loading,
+      productLoading,
+    }))
+  );
+
   constructor(private productsService: ProductsService) {}
 
-  ngOnInit(): void {
-    this.products = this.productsService.getRecommendedProduct();
-  }
+  ngOnInit(): void {}
 
   onAddToCart(id: number) {
     this.productsService.addToCart(id);

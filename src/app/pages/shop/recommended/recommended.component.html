@@ -1,9 +1,16 @@
 <h1>For You</h1>
-<div class="m-auto row row-cols-auto g-3">
-  <app-product-card
-    class="col"
-    *ngFor="let product of products"
-    [product]="product"
-    (addToCart)="onAddToCart($event)"
-  ></app-product-card>
-</div>
+<ng-container *ngIf="vm$ | async as vm">
+  <div *ngIf="vm.loading" class="spinner-border" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+
+  <div class="m-auto row row-cols-auto g-3">
+    <app-product-card
+      class="col"
+      *ngFor="let product of vm.products"
+      [product]="product"
+      [loading]="vm.productLoading === product.id"
+      (addToCart)="onAddToCart($event)"
+    ></app-product-card>
+  </div>
+</ng-container>

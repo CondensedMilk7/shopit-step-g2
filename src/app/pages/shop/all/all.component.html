@@ -1,19 +1,20 @@
 <h1>Shop</h1>
-<!-- <button (click)="onAdd()">Add</button> -->
-<div *ngIf="loading$ | async" class="spinner-border" role="status">
-  <span class="visually-hidden">Loading...</span>
-</div>
-<div *ngIf="products$ | async as products" class="products-grid m-auto g-3">
-  <app-product-card
-    class="col"
-    *ngFor="let product of products"
-    [product]="product"
-    [loading]="(productLoading$ | async) === product.id"
-    (addToCart)="onAddToCart($event)"
-  ></app-product-card>
-</div>
+<ng-container *ngIf="vm$ | async as vm">
+  <div *ngIf="vm.loading" class="spinner-border" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+  <div class="products-grid m-auto g-3">
+    <app-product-card
+      class="col"
+      *ngFor="let product of vm.products"
+      [product]="product"
+      [loading]="vm.productLoading === product.id"
+      (addToCart)="onAddToCart($event)"
+    ></app-product-card>
+  </div>
 
-<app-message-modal
-  [modalMessage]="message$ | async"
-  (close)="messageService.message(null)"
-></app-message-modal>
+  <app-message-modal
+    [modalMessage]="vm.message"
+    (close)="messageService.notify(null)"
+  ></app-message-modal>
+</ng-container>

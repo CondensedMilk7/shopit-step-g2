@@ -4,9 +4,13 @@ import { ModalMessage } from '../types/modal-message';
 
 @Injectable({ providedIn: 'root' })
 export class MessageService {
-  message$ = new BehaviorSubject<ModalMessage | null>(null);
+  private message$ = new BehaviorSubject<ModalMessage | null>(null);
 
-  message(message: ModalMessage | null) {
+  get message() {
+    return this.message$.asObservable();
+  }
+
+  notify(message: ModalMessage | null) {
     this.message$.next(message);
   }
 }
