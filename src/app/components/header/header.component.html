@@ -25,22 +25,32 @@
           routerLinkActive="active"
           >Cart</a
         >
+        <ng-container *ngIf="!user">
+          <a
+            class="nav-link"
+            aria-current="page"
+            routerLink="/sign-in"
+            routerLinkActive="active"
+            >Sign In</a
+          >
 
-        <a
-          class="nav-link"
-          aria-current="page"
-          routerLink="/sign-in"
-          routerLinkActive="active"
-          >Sign In</a
-        >
-
-        <a
-          class="nav-link"
-          aria-current="page"
-          routerLink="/register"
-          routerLinkActive="active"
-          >Register</a
-        >
+          <a
+            class="nav-link"
+            aria-current="page"
+            routerLink="/register"
+            routerLinkActive="active"
+            >Register</a
+          >
+        </ng-container>
+        <ng-container *ngIf="user">
+          <a
+            class="nav-link"
+            aria-current="page"
+            routerLink="/"
+            (click)="signOut.emit()"
+            >Sign out</a
+          >
+        </ng-container>
       </div>
     </div>
     <form class="d-flex" role="search">
@@ -59,7 +69,7 @@
       >
         Search
       </button>
-      <div class="form-check form-switch">
+      <!-- <div class="form-check form-switch">
         <input
           class="form-check-input"
           type="checkbox"
@@ -71,7 +81,8 @@
         <label class="form-check-label" for="flexSwitchCheckDefault"
           >Dark</label
         >
-      </div>
+      </div> -->
+      <div *ngIf="user">Hello, {{ user.firstName }}</div>
     </form>
   </div>
 </nav>

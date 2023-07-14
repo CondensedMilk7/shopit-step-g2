@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { ProductsService } from './services/products.service';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -11,12 +12,15 @@ import { ProductsService } from './services/products.service';
 export class AppComponent implements OnInit, OnDestroy {
   isDark = false;
   searchText = '';
+  user$ = this.authService.user;
+
   destroyed$ = new Subject<void>();
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private productsService: ProductsService
+    private productsService: ProductsService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -24,6 +28,8 @@ export class AppComponent implements OnInit, OnDestroy {
     if (wasDark === 'true') {
       this.isDark = true;
     }
+
+    this.authService.init();
 
     this.productsService.getCart();
 
@@ -45,6 +51,10 @@ export class AppComponent implements OnInit, OnDestroy {
         search: text,
       },
     });
+  }
+
+  onSignOut() {
+    this.authService.signOut();
   }
 
   ngOnDestroy(): void {

@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { GetProductsResponse, Product } from '../types/product';
 import { BehaviorSubject } from 'rxjs';
 import { Cart, GetCartResponse } from '../types/cart';
 import { MessageService } from './message.service';
+import { ENVIRONMENT } from 'src/environment/environment';
+import { AuthService } from './auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class ProductsService {
-  baseUrl = 'https://dummyjson.com';
+  baseUrl = ENVIRONMENT.baseUrl;
 
   private products$ = new BehaviorSubject<Product[]>([]);
   private cart$ = new BehaviorSubject<Cart>({
@@ -40,9 +41,9 @@ export class ProductsService {
   }
 
   constructor(
-    private router: Router,
     private http: HttpClient,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private authService: AuthService
   ) {}
 
   getProducts() {
@@ -68,13 +69,24 @@ export class ProductsService {
   }
 
   getCart() {
-    this.loading$.next(true);
-    this.http
-      .get<GetCartResponse>(`${this.baseUrl}/carts/user/5`)
-      .subscribe((response) => {
-        this.cart$.next(response.carts[0]);
-        this.loading$.next(false);
+    const token = this.authService.getToken();
+    const userId = this.authService.getUserId();
+
+    if (token && userId) {
+      this.loading$.next(true);
+      const headers = new HttpHeaders({
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
       });
+      this.http
+        .get<GetCartResponse>(`${this.baseUrl}/auth/carts/user/${userId}`, {
+          headers,
+        })
+        .subscribe((response) => {
+          this.cart$.next(response.carts[0]);
+          this.loading$.next(false);
+        });
+    }
   }
 
   deleteFromCart(cartId: number, toDeleteId: number) {
@@ -102,9 +114,16 @@ export class ProductsService {
       merge: true,
       products: [{ id: productId, quantity }],
     };
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
 
     this.http
-      .put<Cart>(`${this.baseUrl}/carts/${this.cart$.value.id}`, payload)
+      .put<Cart>(`${this.baseUrl}/auth/carts/${this.cart$.value.id}`, payload, {
+        headers,
+      })
       .subscribe((updatedCart) => {
         this.cart$.next(updatedCart);
         this.productLoading$.next(null);

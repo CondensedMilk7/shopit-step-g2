@@ -5,8 +5,10 @@
   <app-header
     [isDark]="isDark"
     [searchText]="searchText"
+    [user]="user$ | async"
     (toggleDark)="onToggleDark($event)"
     (search)="onSearchProduct($event)"
+    (signOut)="onSignOut()"
   ></app-header>
   <router-outlet></router-outlet>
 </div>
