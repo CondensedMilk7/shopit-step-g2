@@ -98,7 +98,7 @@ export class ProductsService {
     };
 
     this.http
-      .put<Cart>(`${this.baseUrl}/carts/${cartId}`, payload)
+      .put<Cart>(`${this.baseUrl}/auth/carts/${cartId}`, payload)
       .subscribe((updatedCart) => {
         this.cart$.next(updatedCart);
         this.productLoading$.next(null);
