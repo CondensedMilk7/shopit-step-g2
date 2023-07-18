@@ -7,6 +7,7 @@ import { AllComponent } from './pages/shop/all/all.component';
 import { SignInComponent } from './pages/sign-in/sign-in.component';
 import { ProductDetailsComponent } from './pages/shop/product-details/product-details.component';
 import { RegisterComponent } from './pages/register/register.component';
+import { canActivateAuthenticated } from './guards';
 
 export const APP_ROUTES: Routes = [
   { path: 'register', component: RegisterComponent },
@@ -15,12 +16,20 @@ export const APP_ROUTES: Routes = [
     path: 'shop',
     component: ShopComponent,
     children: [
-      { path: 'recommended', component: RecommendedComponent },
+      {
+        path: 'recommended',
+        component: RecommendedComponent,
+        canActivate: [canActivateAuthenticated],
+      },
       { path: ':productId', component: ProductDetailsComponent },
       { path: '', component: AllComponent },
     ],
   },
-  { path: 'cart', component: CartComponent },
+  {
+    path: 'cart',
+    component: CartComponent,
+    canActivate: [canActivateAuthenticated],
+  },
   { path: '', redirectTo: 'shop', pathMatch: 'full' },
   { path: '**', component: NotFoundComponent },
 ];

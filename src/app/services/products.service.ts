@@ -69,13 +69,11 @@ export class ProductsService {
   }
 
   getCart() {
-    const token = this.authService.getToken();
     const userId = this.authService.getUserId();
 
-    if (token && userId) {
+    if (this.authService.isAuthenticated()) {
       this.loading$.next(true);
       const headers = new HttpHeaders({
-        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       });
       this.http
@@ -114,9 +112,8 @@ export class ProductsService {
       merge: true,
       products: [{ id: productId, quantity }],
     };
-    const token = this.authService.getToken();
+
     const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     });
 

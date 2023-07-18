@@ -19,6 +19,8 @@ import { ProductDetailsComponent } from './pages/shop/product-details/product-de
 import { RegisterComponent } from './pages/register/register.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MessageModalComponent } from './components/message-modal/message-modal.component';
+import { JwtModule } from '@auth0/angular-jwt';
+import { ENVIRONMENT } from 'src/environment/environment';
 
 @NgModule({
   declarations: [
@@ -43,6 +45,12 @@ import { MessageModalComponent } from './components/message-modal/message-modal.
     RouterModule.forRoot(APP_ROUTES),
     ReactiveFormsModule,
     HttpClientModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: () => localStorage.getItem(ENVIRONMENT.tokenKey),
+        allowedDomains: ['dummyjson.com'],
+      },
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent],
